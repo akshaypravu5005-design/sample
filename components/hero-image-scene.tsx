@@ -4,23 +4,48 @@ import Image from "next/image"
 import { motion, type MotionValue, useTransform } from "framer-motion"
 
 /**
- * Full-screen landing image that scales and pans with scroll progress,
- * mirroring the zoom feel of the previous 3D building scene.
- * Swap `src` below with your own `/hero.jpg` once uploaded.
+ * Two-layer scroll-zoom that mimics walking INTO the house:
+ *  - Exterior layer zooms deep toward the central opening, then fades out.
+ *  - Interior layer is revealed through that opening and settles into view,
+ *    giving the feeling of passing through the doorway into the interior.
+ * Swap the exterior `src` with your own `/hero.jpg` once uploaded.
  */
 export default function HeroImageScene({
   progress,
 }: {
   progress: MotionValue<number>
 }) {
-  // Scroll-driven zoom + subtle pan (same journey feel as the 3D scene)
-  const scale = useTransform(progress, [0, 0.5, 1], [1.05, 1.55, 2.4])
-  const y = useTransform(progress, [0, 1], ["0%", "-8%"])
-  const x = useTransform(progress, [0, 1], ["0%", "3%"])
+  // --- Exterior: zoom hard toward the center opening, then hand off ---
+  const extScale = useTransform(progress, [0, 0.55], [1.05, 3.6])
+  const extOpacity = useTransform(progress, [0, 0.42, 0.6], [1, 1, 0])
+  const extY = useTransform(progress, [0, 0.55], ["0%", "-6%"])
+
+  // --- Interior: emerge from the opening (starts large, settles) ---
+  const intScale = useTransform(progress, [0.42, 1], [1.7, 1.02])
+  const intOpacity = useTransform(progress, [0.42, 0.62], [0, 1])
+  const intY = useTransform(progress, [0.42, 1], ["4%", "-3%"])
 
   return (
     <div className="absolute inset-0 h-full w-full overflow-hidden bg-background">
-      <motion.div style={{ scale, x, y }} className="absolute inset-0 h-full w-full will-change-transform">
+      {/* Interior layer (behind) */}
+      <motion.div
+        style={{ scale: intScale, opacity: intOpacity, y: intY }}
+        className="absolute inset-0 h-full w-full will-change-transform"
+      >
+        <Image
+          src="/images/hero-interior.png"
+          alt="Interior great hall of a Brick and Soul house"
+          fill
+          sizes="100vw"
+          className="object-cover object-center"
+        />
+      </motion.div>
+
+      {/* Exterior layer (front) */}
+      <motion.div
+        style={{ scale: extScale, opacity: extOpacity, y: extY }}
+        className="absolute inset-0 h-full w-full will-change-transform"
+      >
         <Image
           src="/images/hero-landing.png"
           alt="Brick and Soul signature architecture at blue hour"
