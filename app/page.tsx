@@ -1,5 +1,5 @@
 import Navbar from "@/components/navbar"
-import Hero from "@/components/hero"
+import ScrollJourney from "@/components/scroll-journey"
 import Marquee from "@/components/marquee"
 import Projects from "@/components/projects"
 import Studio from "@/components/studio"
@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <main>
       <Navbar />
-      <Hero />
+      <ScrollJourney />
       <Marquee />
       <Projects />
       <Studio />
