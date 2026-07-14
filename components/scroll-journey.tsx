@@ -5,10 +5,7 @@ import dynamic from "next/dynamic"
 import { motion, useScroll, useTransform, useSpring, useMotionValueEvent } from "framer-motion"
 import { ArrowDown } from "lucide-react"
 
-const BuildingScene = dynamic(() => import("./building-scene"), {
-  ssr: false,
-  loading: () => <div className="h-full w-full" aria-hidden="true" />,
-})
+import HeroImageScene from "./hero-image-scene"
 
 const ease = [0.22, 1, 0.36, 1] as const
 
@@ -48,9 +45,9 @@ export default function ScrollJourney() {
     <section ref={ref} id="top" className="relative h-[420vh]">
       {/* Pinned viewport */}
       <div className="sticky top-0 h-screen overflow-hidden">
-        {/* 3D scene */}
+        {/* Full-screen landing image (scroll-zoom) */}
         <div className="absolute inset-0 z-0">
-          <BuildingScene progress={smoothProgress} />
+          <HeroImageScene progress={smoothProgress} />
         </div>
 
         {/* Subtle vignette */}
